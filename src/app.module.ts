@@ -10,6 +10,7 @@ import { AboutUsModule } from './about-us/about-us.module';
 import { FeedbackModule } from './feedback/feedback.module';
 import { BlogsModule } from './blogs/blogs.module';
 import { FaqModule } from './faq/faq.module';
+import { PartnersModule } from './partners/partners.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { FaqModule } from './faq/faq.module';
     FeedbackModule,
     BlogsModule,
     FaqModule,
+    PartnersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
