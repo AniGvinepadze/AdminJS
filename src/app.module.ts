@@ -11,6 +11,7 @@ import { FeedbackModule } from './feedback/feedback.module';
 import { BlogsModule } from './blogs/blogs.module';
 import { FaqModule } from './faq/faq.module';
 import { PartnersModule } from './partners/partners.module';
+import { AwsS3Module } from './aws-s3/aws-s3.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { PartnersModule } from './partners/partners.module';
     BlogsModule,
     FaqModule,
     PartnersModule,
+    AwsS3Module,
   ],
   controllers: [AppController],
   providers: [AppService],
