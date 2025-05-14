@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { CoursesModule } from './courses/courses.module';
 import { AboutUsModule } from './about-us/about-us.module';
 import { FeedbackModule } from './feedback/feedback.module';
+import { BlogsModule } from './blogs/blogs.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { FeedbackModule } from './feedback/feedback.module';
     CoursesModule,
     AboutUsModule,
     FeedbackModule,
+    BlogsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
