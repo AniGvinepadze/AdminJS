@@ -9,6 +9,7 @@ import { CoursesModule } from './courses/courses.module';
 import { AboutUsModule } from './about-us/about-us.module';
 import { FeedbackModule } from './feedback/feedback.module';
 import { BlogsModule } from './blogs/blogs.module';
+import { FaqModule } from './faq/faq.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { BlogsModule } from './blogs/blogs.module';
     AboutUsModule,
     FeedbackModule,
     BlogsModule,
+    FaqModule,
   ],
   controllers: [AppController],
   providers: [AppService],
