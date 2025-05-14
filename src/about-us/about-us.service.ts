@@ -1,18 +1,22 @@
 import {
   BadRequestException,
+  Body,
   Injectable,
   NotFoundException,
+  Post,
 } from '@nestjs/common';
 import { CreateAboutUsDto } from './dto/create-about-us.dto';
 import { UpdateAboutUsDto } from './dto/update-about-us.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { isValidObjectId, Model } from 'mongoose';
 import { AboutUs } from './schema/about-us.schema';
+import { AwsS3Service } from 'src/aws-s3/aws-s3.service';
 
 @Injectable()
 export class AboutUsService {
   constructor(
     @InjectModel('aboutUs') private readonly aboutUsModel: Model<AboutUs>,
+    private s3Service: AwsS3Service,
   ) {}
 
   async create(createAboutUsDto: CreateAboutUsDto) {
@@ -20,6 +24,18 @@ export class AboutUsService {
     if (!content) throw new BadRequestException('content could not be updated');
     return content;
   }
+
+  uploadImage(filePath, file) {
+    return this.s3Service.uploadFile(filePath, file);
+  }
+
+  getImage(fileId){
+    return this.s3Service.getImageById(fileId)
+  }
+  deleteImageById(fileId){
+    return this.s3Service.deleteImageById(fileId)
+  }
+  
 
   findAll() {
     return this.aboutUsModel.find();
