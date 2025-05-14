@@ -4,7 +4,6 @@ import { UpdateAdminDto } from './dto/update-admin.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { isValidObjectId, Model } from 'mongoose';
 import { Admin } from './schema/admin.schema';
-import { throwError } from 'rxjs';
 
 @Injectable()
 export class AdminService {
