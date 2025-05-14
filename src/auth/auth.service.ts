@@ -14,8 +14,8 @@ export class AuthService {
   ) {}
 
   async signUp({ email, fullName, password }: SignUpDto) {
-    const existUser = await this.adminModel.findOne({ email });
-    if (existUser) throw new BadRequestException('Admin already exists');
+    const existAdmin = await this.adminModel.findOne({ email });
+    if (existAdmin) throw new BadRequestException('Admin already exists');
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -25,21 +25,28 @@ export class AuthService {
   }
 
   async signIn({ email, password }: SignInDto) {
-    const existUser = await this.adminModel.findOne({ email });
-    if (!existUser)
+    const existAdmin = await this.adminModel.findOne({ email });
+    if (!existAdmin)
       throw new BadRequestException('Email or Password is invalid');
 
-    const isPasswordEqual = await bcrypt.compare(password, existUser.password);
+    const isPasswordEqual = await bcrypt.compare(password, existAdmin.password);
     if (!isPasswordEqual)
       throw new BadRequestException('Email or Password is invalid');
 
     const payLoad = {
-      userId: existUser._id,
+      adminId: existAdmin._id,
     };
 
     const accessToken = await this.jwtService.sign(payLoad, {
       expiresIn: '1h',
     });
     return { accessToken };
+  }
+
+  async getCurrentAdmin(adminId) {
+    console.log(adminId)
+    const admin = await this.adminModel.findById(adminId).select('-password');
+    console.log(admin)
+    return admin;
   }
 }

@@ -11,13 +11,13 @@ export class AdminService {
   constructor(@InjectModel('admin') private adminModel: Model<Admin>) {}
 
   findAll() {
-    return this.adminModel.find();
+    return this.adminModel.find().select('-password');
   }
 
   async findOne(id: string) {
     if (!isValidObjectId(id))
       throw new BadRequestException('Invalid id format provided');
-    const admin = await this.adminModel.findById(id);
+    const admin = await this.adminModel.findById(id).select('-password');
     if (!admin) throw new BadRequestException('admin was not found');
     return admin;
   }
@@ -42,5 +42,6 @@ export class AdminService {
     const deleteAdmin = await this.adminModel.findByIdAndDelete(id);
     if (!deleteAdmin)
       throw new BadRequestException('admin could not be deleted');
+    return { message: 'Deleted successfully', deletedAdmin: deleteAdmin };
   }
 }

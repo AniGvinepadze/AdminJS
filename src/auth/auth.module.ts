@@ -7,14 +7,13 @@ import { adminSchema } from 'src/admin/schema/admin.schema';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 
 @Module({
-  imports:[
+  imports: [
     ConfigModule.forRoot(),
-    MongooseModule.forFeature([{name:"admin",schema:adminSchema}]),
+    MongooseModule.forFeature([{ name: 'admin', schema: adminSchema }]),
     JwtModule.register({
-      global:true,
-      secret:process.env.JWT_SECRET
-    })
-
+      global: true,
+      secret: process.env.JWT_SECRET,
+    }),
   ],
   controllers: [AuthController],
   providers: [AuthService],
