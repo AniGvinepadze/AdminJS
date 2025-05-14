@@ -1,9 +1,12 @@
-import { Schema } from "@nestjs/mongoose";
-import { timeStamp } from "node:console";
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
-
-
-@Schema({timestamps:true})
+@Schema({ timestamps: true })
 export class Faq {
-    
+  @Prop({ type: String })
+  question: string;
+
+  @Prop({ type: String })
+  answer: string;
 }
+
+export const faqSchema = SchemaFactory.createForClass(Faq)

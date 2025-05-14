@@ -19,16 +19,16 @@ export class FaqController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.faqService.findOne(+id);
+    return this.faqService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateFaqDto: UpdateFaqDto) {
-    return this.faqService.update(+id, updateFaqDto);
+    return this.faqService.update(id, updateFaqDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.faqService.remove(+id);
+    return this.faqService.remove(id);
   }
 }
