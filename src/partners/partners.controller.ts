@@ -19,16 +19,16 @@ export class PartnersController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.partnersService.findOne(+id);
+    return this.partnersService.findOne(id);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updatePartnerDto: UpdatePartnerDto) {
-    return this.partnersService.update(+id, updatePartnerDto);
+    return this.partnersService.update(id, updatePartnerDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.partnersService.remove(+id);
+    return this.partnersService.remove(id);
   }
 }
