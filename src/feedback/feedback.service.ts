@@ -1,26 +1,58 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateFeedbackDto } from './dto/create-feedback.dto';
 import { UpdateFeedbackDto } from './dto/update-feedback.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { isValidObjectId, Model } from 'mongoose';
+import { Feedback } from './schema/feedback.schema';
+import { retry } from 'rxjs';
 
 @Injectable()
 export class FeedbackService {
-  create(createFeedbackDto: CreateFeedbackDto) {
-    return 'This action adds a new feedback';
+  constructor(
+    @InjectModel('feedback') private readonly feedbackModel: Model<Feedback>,
+  ) {}
+
+  async create(createFeedbackDto: CreateFeedbackDto) {
+    const feedback = await this.feedbackModel.create(createFeedbackDto);
+    if (!feedback)
+      throw new BadRequestException('feedback could not be cretaed');
+    return feedback;
   }
 
   findAll() {
-    return `This action returns all feedback`;
+    return this.feedbackModel.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} feedback`;
+  async findOne(id: string) {
+    if (!isValidObjectId)
+      throw new BadRequestException('Invalid id is provided');
+    const feedback = await this.feedbackModel.findById(id);
+    if (!feedback) throw new NotFoundException('feedback was not found');
+    return feedback;
   }
 
-  update(id: number, updateFeedbackDto: UpdateFeedbackDto) {
-    return `This action updates a #${id} feedback`;
+  async update(id: string, updateFeedbackDto: UpdateFeedbackDto) {
+    if (!isValidObjectId)
+      throw new BadRequestException('Invalid id is provided');
+    const updatedFeedback = await this.feedbackModel.findByIdAndUpdate(
+      id,
+      updateFeedbackDto,
+      { new: true },
+    );
+    if (!updatedFeedback)
+      throw new BadRequestException('feedback could not be updated');
+    return { message: 'feedback updated successfully', updatedFeedback };
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} feedback`;
+ async remove(id: string) {
+    if (!isValidObjectId)
+      throw new BadRequestException('Invalid id is provided');
+    const deletedFeedback = await this.feedbackModel.findByIdAndDelete(id)
+    if(!deletedFeedback) throw new BadRequestException('feedback could not be deleeted')
+    return { message: 'feedback deleted successfully', deletedFeedback };
   }
 }
