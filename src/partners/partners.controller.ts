@@ -1,9 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { PartnersService } from './partners.service';
 import { CreatePartnerDto } from './dto/create-partner.dto';
 import { UpdatePartnerDto } from './dto/update-partner.dto';
+import { isAuthGuard } from 'src/guards/auth.guard';
 
 @Controller('partners')
+@UseGuards(isAuthGuard)
 export class PartnersController {
   constructor(private readonly partnersService: PartnersService) {}
 
