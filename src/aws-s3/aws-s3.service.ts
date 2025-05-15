@@ -1,7 +1,7 @@
 import { Body, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
-    DeleteObjectCommand,
+  DeleteObjectCommand,
   GetObjectCommand,
   PutObjectCommand,
   S3Client,
@@ -31,6 +31,7 @@ export class AwsS3Service {
       Key: filePath,
       Bucket: this.bucketName,
       Body: file.buffer,
+      ContentType: file.mimetype,
     };
 
     const command = new PutObjectCommand(config);
@@ -48,10 +49,11 @@ export class AwsS3Service {
     };
     const command = new GetObjectCommand(config);
     const fileStream = await this.storageService.send(command);
-    const chunks = [];
+    const chunks: Buffer[] = [];
 
     if (fileStream.Body instanceof Readable) {
       for await (let stream of fileStream.Body) {
+        console.log(stream, 'stream');
         chunks.push(stream);
       }
       const fileBuffer = Buffer.concat(chunks);
@@ -66,9 +68,9 @@ export class AwsS3Service {
       Key: fileId,
       Bucket: this.bucketName,
     };
-    const command = new DeleteObjectCommand(config)
-    await this.storageService.send(command)
+    const command = new DeleteObjectCommand(config);
+    await this.storageService.send(command);
 
-    return fileId
+    return fileId;
   }
 }
