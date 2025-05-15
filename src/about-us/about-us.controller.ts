@@ -45,10 +45,7 @@ export class AboutUsController {
     console.log('deleteImageById called with:', fileId);
     return this.aboutUsService.deleteImageById(fileId);
   }
-  @Post('deleteImageTest')
-  deleteImageTest() {
-    return 'delete image test route works';
-  }
+
 
   @Get()
   findAll() {
