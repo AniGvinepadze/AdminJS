@@ -8,10 +8,11 @@ import { UpdateCourseDto } from './dto/update-course.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { isValidObjectId, Model } from 'mongoose';
 import { Course } from './schema/course.schema';
+import { AwsS3Service } from 'src/aws-s3/aws-s3.service';
 
 @Injectable()
 export class CoursesService {
-  constructor(@InjectModel('course') private courseModel: Model<Course>) {}
+  constructor(@InjectModel('course') private courseModel: Model<Course>,   private s3Service: AwsS3Service,) {}
 
   async create(createCourseDto: CreateCourseDto) {
     console.log(createCourseDto, 'create');
@@ -20,6 +21,16 @@ export class CoursesService {
     return course;
   }
 
+  uploadImage(filePath, file) {
+    return this.s3Service.uploadFile(filePath, file);
+  }
+
+  getImage(fileId){
+    return this.s3Service.getImageById(fileId)
+  }
+  deleteImageById(fileId){
+    return this.s3Service.deleteImageById(fileId)
+  }
   findAll() {
     return this.courseModel.find();
   }
