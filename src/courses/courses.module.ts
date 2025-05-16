@@ -8,7 +8,7 @@ import { AwsS3Module } from 'src/aws-s3/aws-s3.module';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: 'course', schema: courseSchema }]),
-    AwsS3Module,
+    AwsS3Module
   ],
   controllers: [CoursesController],
   providers: [CoursesService],

@@ -25,25 +25,25 @@ export class CoursesController {
   create(@Body() createCourseDto: CreateCourseDto) {
     return this.coursesService.create(createCourseDto);
   }
-  @Post('upload-image')
-  @UseInterceptors(FileInterceptor('file'))
-  uploadImage(@UploadedFile() file: Express.Multer.File) {
-    const path = Math.random().toString().slice(2);
+  // @Post('upload-image')
+  // @UseInterceptors(FileInterceptor('file'))
+  // uploadImage(@UploadedFile() file: Express.Multer.File) {
+  //   const path = Math.random().toString().slice(2);
 
-    const type = file.mimetype.split('/')[1];
-    const filePath = `images/${path}`;
-    console.log(filePath, 'filepath');
-    return this.coursesService.uploadImage(filePath, file.buffer);
-  }
-  @Post('getImage')
-  getFileById(@Body('fileId') fileId) {
-    return this.coursesService.getImage(fileId);
-  }
-  @Post('deleteImage')
-  deleteImageById(@Body('fileId') fileId: string) {
-    console.log('deleteImageById called with:', fileId);
-    return this.coursesService.deleteImageById(fileId);
-  }
+  //   const type = file.mimetype.split('/')[1];
+  //   const filePath = `images/${path}`;
+  //   console.log(filePath, 'filepath');
+  //   return this.coursesService.uploadImage(filePath, file.buffer);
+  // }
+  // @Post('getImage')
+  // getFileById(@Body('fileId') fileId) {
+  //   return this.coursesService.getImage(fileId);
+  // }
+  // @Post('deleteImage')
+  // deleteImageById(@Body('fileId') fileId: string) {
+  //   console.log('deleteImageById called with:', fileId);
+  //   return this.coursesService.deleteImageById(fileId);
+  // }
   @Get()
   findAll() {
     return this.coursesService.findAll();

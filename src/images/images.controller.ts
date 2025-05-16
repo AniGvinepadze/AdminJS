@@ -1,34 +1,39 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  UseGuards,
+  UseInterceptors,
+  UploadedFile,
+  Body,
+} from '@nestjs/common';
 import { ImagesService } from './images.service';
-import { CreateImageDto } from './dto/create-image.dto';
-import { UpdateImageDto } from './dto/update-image.dto';
+import { isAuthGuard } from 'src/guards/auth.guard';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('images')
+@UseGuards(isAuthGuard)
 export class ImagesController {
   constructor(private readonly imagesService: ImagesService) {}
 
-  @Post()
-  create(@Body() createImageDto: CreateImageDto) {
-    return this.imagesService.create(createImageDto);
+  @Post('upload-image')
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadImage(
+    @UploadedFile() file: Express.Multer.File,
+    @Body('courseId') courseId?: string,
+    @Body('partnerId') partnerId?: string,
+  ) {
+    const path = Math.random().toString().slice(2);
+    const filePath = `images/${path}`;
+    return this.imagesService.uploadImage(filePath, file,courseId, partnerId);
   }
 
-  @Get()
-  findAll() {
-    return this.imagesService.findAll();
+  @Post('getImage')
+  getFileById(@Body('fileId') fileId: string) {
+    return this.imagesService.getImage(fileId);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.imagesService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateImageDto: UpdateImageDto) {
-    return this.imagesService.update(+id, updateImageDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.imagesService.remove(+id);
+  @Post('deleteImage')
+  deleteImageById(@Body('fileId') fileId: string) {
+    return this.imagesService.deleteImageById(fileId);
   }
 }
