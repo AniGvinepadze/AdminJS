@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { AwsS3Service } from 'src/aws-s3/aws-s3.service';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
 import { Image } from './schema/image.schema';
 import { Types } from 'mongoose';
 import { Course } from 'src/courses/schema/course.schema';
+import { UpdateImageDto } from './dto/update-image.dto';
 
 @Injectable()
 export class ImagesService {
@@ -51,6 +52,31 @@ export class ImagesService {
 
     return this.s3Service.getImageById(image.s3Key);
   }
+//   async updateImage(
+//   imageId: string,
+//   updateData: UpdateImageDto,
+// ) {
+
+//   if (updateData.course) {
+//     updateData.course = new Types.ObjectId(updateData.course);
+//   }
+//   if (updateData.partner) {
+//     updateData.partner = new Types.ObjectId(updateData.partner);
+//   }
+
+//   const updatedImage = await this.imageModel.findByIdAndUpdate(
+//     imageId,
+//     updateData,
+//     { new: true },
+//   );
+
+//   if (!updatedImage) {
+//     throw new NotFoundException(`Image with ID ${imageId} not found`);
+//   }
+
+//   return updatedImage;
+// }
+
 
   async deleteImageById(fileId: string) {
     const image = await this.imageModel.findById(fileId).exec();
