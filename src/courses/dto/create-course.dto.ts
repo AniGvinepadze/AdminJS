@@ -8,7 +8,7 @@ export class CreateCourseDto {
   @IsArray()
   @IsOptional()
   images?: string[];
-
+  
   @IsNotEmpty()
   @IsString()
   link: string;

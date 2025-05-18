@@ -21,9 +21,11 @@ export class ImagesService {
     partnerId?: string,
   ) {
     await this.s3Service.uploadFile(filePath, file);
+    const type = file.mimetype.split('/')[1];
+    console.log(file.mimetype.split);
 
     const imageData: Partial<Image> = {
-      s3Key: filePath,
+      s3Key: `${filePath}.${type}`,
       mimetype: file.mimetype,
       size: file.size,
     };
@@ -47,36 +49,36 @@ export class ImagesService {
   }
 
   async getImage(fileId: string) {
-    const image = await this.imageModel.findById(fileId).exec();
+    const image = await this.imageModel.findOne({ s3Key: fileId });
+
     if (!image) return null;
 
     return this.s3Service.getImageById(image.s3Key);
   }
-//   async updateImage(
-//   imageId: string,
-//   updateData: UpdateImageDto,
-// ) {
+  //   async updateImage(
+  //   imageId: string,
+  //   updateData: UpdateImageDto,
+  // ) {
 
-//   if (updateData.course) {
-//     updateData.course = new Types.ObjectId(updateData.course);
-//   }
-//   if (updateData.partner) {
-//     updateData.partner = new Types.ObjectId(updateData.partner);
-//   }
+  //   if (updateData.course) {
+  //     updateData.course = new Types.ObjectId(updateData.course);
+  //   }
+  //   if (updateData.partner) {
+  //     updateData.partner = new Types.ObjectId(updateData.partner);
+  //   }
 
-//   const updatedImage = await this.imageModel.findByIdAndUpdate(
-//     imageId,
-//     updateData,
-//     { new: true },
-//   );
+  //   const updatedImage = await this.imageModel.findByIdAndUpdate(
+  //     imageId,
+  //     updateData,
+  //     { new: true },
+  //   );
 
-//   if (!updatedImage) {
-//     throw new NotFoundException(`Image with ID ${imageId} not found`);
-//   }
+  //   if (!updatedImage) {
+  //     throw new NotFoundException(`Image with ID ${imageId} not found`);
+  //   }
 
-//   return updatedImage;
-// }
-
+  //   return updatedImage;
+  // }
 
   async deleteImageById(fileId: string) {
     const image = await this.imageModel.findById(fileId).exec();

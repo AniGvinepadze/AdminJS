@@ -31,6 +31,7 @@ export class CoursesService {
   deleteImageById(fileId){
     return this.s3Service.deleteImageById(fileId)
   }
+  
   findAll() {
     return this.courseModel.find();
   }

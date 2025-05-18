@@ -6,9 +6,9 @@ export class Course {
   @Prop({ type: String })
   name: string;
 
-  @Prop({ type: [mongoose.Schema.Types.ObjectId], ref: 'Image', default: [] })
-  images: Types.ObjectId[];
-  
+  @Prop({ type: [String], default: [] })
+  images: string[];
+
   @Prop({ type: String })
   link: string;
 

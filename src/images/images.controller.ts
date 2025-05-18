@@ -16,7 +16,7 @@ export class ImagesController {
   constructor(private readonly imagesService: ImagesService) {}
 
   @Post('upload-image')
-  @UseInterceptors(FileInterceptor('file'))
+  @UseInterceptors(FileInterceptor('img'))
   async uploadImage(
     @UploadedFile() file: Express.Multer.File,
     @Body('courseId') courseId?: string,

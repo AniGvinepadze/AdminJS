@@ -1,4 +1,4 @@
-import { Body, Injectable } from '@nestjs/common';
+import { BadRequestException, Body, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
   DeleteObjectCommand,
@@ -25,7 +25,7 @@ export class AwsS3Service {
   }
 
   async uploadFile(filePath: string, file) {
-    if (!filePath) return;
+    if (!filePath || !file) throw new BadRequestException('File is required');
 
     const config = {
       Key: filePath,
@@ -33,10 +33,10 @@ export class AwsS3Service {
       Body: file.buffer,
       ContentType: file.mimetype,
     };
-
-    const command = new PutObjectCommand(config);
-    await this.storageService.send(command);
-
+    console.log(file, 'file');
+    console.log(config, 'cinfig');
+    const uploadCommand = new PutObjectCommand(config);
+    await this.storageService.send(uploadCommand);
     return filePath;
   }
 
