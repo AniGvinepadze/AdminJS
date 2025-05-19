@@ -13,6 +13,7 @@ import { FaqModule } from './faq/faq.module';
 import { PartnersModule } from './partners/partners.module';
 import { AwsS3Module } from './aws-s3/aws-s3.module';
 import { ImagesModule } from './images/images.module';
+import { WhyUsModule } from './why-us/why-us.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { ImagesModule } from './images/images.module';
     PartnersModule,
     AwsS3Module,
     ImagesModule,
+    WhyUsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
