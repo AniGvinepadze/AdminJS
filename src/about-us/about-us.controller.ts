@@ -9,12 +9,14 @@ import {
   UseGuards,
   UseInterceptors,
   UploadedFile,
+  BadRequestException,
 } from '@nestjs/common';
 import { AboutUsService } from './about-us.service';
 import { CreateAboutUsDto } from './dto/create-about-us.dto';
 import { UpdateAboutUsDto } from './dto/update-about-us.dto';
 import { isAuthGuard } from 'src/guards/auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { v4 } from 'uuid';
 
 @Controller('about-us')
 export class AboutUsController {
@@ -22,30 +24,27 @@ export class AboutUsController {
 
   @Post()
   @UseGuards(isAuthGuard)
-  create(@Body() createAboutUsDto: CreateAboutUsDto) {
+  @UseInterceptors(FileInterceptor('img'))
+  async create(
+    @Body() createAboutUsDto: CreateAboutUsDto,
+    @UploadedFile() file?: Express.Multer.File,
+  ) {
+    console.log("shemovida")
+    const mimetype = file?.mimetype.split('/')[1];
+    console.log(mimetype, 'mimetype');
+    const filePath = `images/${v4()}.${mimetype}`;
+    const imageUrl = await this.aboutUsService.uploadImage(
+      filePath,
+      file?.buffer,
+    );
+
+    if (!imageUrl) {
+      throw new BadRequestException('Image upload failed');
+    }
+
+    createAboutUsDto.images = [imageUrl];
     return this.aboutUsService.create(createAboutUsDto);
   }
-
-  @Post('upload-image')
-  @UseInterceptors(FileInterceptor('file'))
-  uploadImage(@UploadedFile() file: Express.Multer.File) {
-    const path = Math.random().toString().slice(2);
-
-    const type = file.mimetype.split('/')[1];
-    const filePath = `images/${path}`;
-    console.log(filePath, 'filepath');
-    return this.aboutUsService.uploadImage(filePath, file.buffer);
-  }
-  @Post('getImage')
-  getFileById(@Body('fileId') fileId) {
-    return this.aboutUsService.getImage(fileId);
-  }
-  @Post('deleteImage')
-  deleteImageById(@Body('fileId') fileId: string) {
-    console.log('deleteImageById called with:', fileId);
-    return this.aboutUsService.deleteImageById(fileId);
-  }
-
 
   @Get()
   findAll() {

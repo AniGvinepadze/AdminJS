@@ -21,10 +21,11 @@ export class ImagesController {
     @UploadedFile() file: Express.Multer.File,
     @Body('courseId') courseId?: string,
     @Body('partnerId') partnerId?: string,
+     @Body('partnerId') aboutUsId?: string,
   ) {
     const path = Math.random().toString().slice(2);
     const filePath = `images/${path}`;
-    return this.imagesService.uploadImage(filePath, file,courseId, partnerId);
+    return this.imagesService.uploadImage(filePath, file,courseId, partnerId,aboutUsId);
   }
 
   @Post('getImage')

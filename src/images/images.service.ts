@@ -19,10 +19,11 @@ export class ImagesService {
     file: Express.Multer.File,
     courseId?: string,
     partnerId?: string,
+    aboutUsId?: string,
   ) {
     await this.s3Service.uploadFile(filePath, file);
     const type = file.mimetype.split('/')[1];
-    console.log(file.mimetype.split);
+    
 
     const imageData: Partial<Image> = {
       s3Key: `${filePath}.${type}`,
@@ -44,6 +45,12 @@ export class ImagesService {
         $push: { images: savedImage._id },
       });
     }
+        if (aboutUsId) {
+      await this.courseModel.findByIdAndUpdate(aboutUsId, {
+        $push: { images: savedImage._id },
+      });
+    }
+
 
     return savedImage;
   }

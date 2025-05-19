@@ -8,8 +8,9 @@ export class AboutUs {
   @Prop({ type: String })
   description: string;
 
-  @Prop({ type: String })
-  img: string;
+  @Prop({ type: [String], default: [] })
+  images: string[];
+
 }
 
 export const aboutUsSchema = SchemaFactory.createForClass(AboutUs);
