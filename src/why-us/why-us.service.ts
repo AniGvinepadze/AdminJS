@@ -1,26 +1,59 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateWhyUsDto } from './dto/create-why-us.dto';
 import { UpdateWhyUsDto } from './dto/update-why-us.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { isValidObjectId, Model } from 'mongoose';
+import { WhyUs } from './schema/why-us.schema';
+import { PassThrough } from 'stream';
 
 @Injectable()
+
 export class WhyUsService {
-  create(createWhyUsDto: CreateWhyUsDto) {
-    return 'This action adds a new whyUs';
+  constructor(
+    @InjectModel('why-us') private readonly whyusModel: Model<WhyUs>,
+  ) {}
+  async create(createWhyUsDto: CreateWhyUsDto) {
+    const whyUs = await this.whyusModel.create(createWhyUsDto);
+    if (!whyUs) throw new BadRequestException('why-us xould not be created');
+    return whyUs;
   }
 
   findAll() {
-    return `This action returns all whyUs`;
+    return this.whyusModel.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} whyUs`;
+  async findOne(id: string) {
+    if (!isValidObjectId(id))
+      throw new BadRequestException('invalid id format is provided');
+    const whyUs = await this.whyusModel.findById(id);
+    if (!whyUs) throw new NotFoundException('why- us coul not be found');
+    return whyUs;
   }
 
-  update(id: number, updateWhyUsDto: UpdateWhyUsDto) {
-    return `This action updates a #${id} whyUs`;
+  async update(id: string, updateWhyUsDto: UpdateWhyUsDto) {
+    if (!isValidObjectId(id))
+      throw new BadRequestException('invalid id format is provided');
+    const updatedWhyUs = await this.whyusModel.findByIdAndUpdate(
+      id,
+      updateWhyUsDto,
+      { new: true },
+    );
+    if (!updatedWhyUs)
+      throw new BadRequestException('why us could not be updated');
+    return { message: 'why us updated succesffully', updatedWhyUs };
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} whyUs`;
+  async remove(id: string) {
+    if (!isValidObjectId(id))
+      throw new BadRequestException('invalid id format is provided');
+
+    const deleetedWhyUs = await this.whyusModel.findByIdAndDelete(id);
+    if (!deleetedWhyUs)
+      throw new BadRequestException('why us could not be deleted');
+    return { message: 'why us updated succesffully', deleetedWhyUs };
   }
 }

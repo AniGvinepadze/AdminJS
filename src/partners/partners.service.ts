@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Injectable,
   NotFoundException,
+  UseGuards,
 } from '@nestjs/common';
 import { CreatePartnerDto } from './dto/create-partner.dto';
 import { UpdatePartnerDto } from './dto/update-partner.dto';
@@ -9,8 +10,10 @@ import { InjectModel } from '@nestjs/mongoose';
 import { isValidObjectId, Model } from 'mongoose';
 import { Partner } from './schema/partner.schema';
 import { AwsS3Service } from 'src/aws-s3/aws-s3.service';
+import { isAuthGuard } from 'src/guards/auth.guard';
 
 @Injectable()
+
 export class PartnersService {
   constructor(
     @InjectModel('partner') private readonly partnerModel: Model<Partner>,private s3Service: AwsS3Service,
