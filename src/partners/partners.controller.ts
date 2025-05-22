@@ -9,6 +9,7 @@ import {
   UseGuards,
   UseInterceptors,
   UploadedFile,
+  BadRequestException,
 } from '@nestjs/common';
 import { PartnersService } from './partners.service';
 import { CreatePartnerDto } from './dto/create-partner.dto';
@@ -16,6 +17,7 @@ import { UpdatePartnerDto } from './dto/update-partner.dto';
 import { isAuthGuard } from 'src/guards/auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { AwsS3Service } from 'src/aws-s3/aws-s3.service';
+import { v4 } from 'uuid';
 
 @Controller('partners')
 @UseGuards(isAuthGuard)
@@ -23,7 +25,16 @@ export class PartnersController {
   constructor(private readonly partnersService: PartnersService) {}
 
   @Post()
-  create(@Body() createPartnerDto: CreatePartnerDto) {
+  @UseInterceptors(FileInterceptor("img"))
+ async create(@Body() createPartnerDto: CreatePartnerDto,@UploadedFile() file:Express.Multer.File) {
+    const mimetype = file.mimetype.split('/')[1]
+    const filePath = `images/${v4()}.${mimetype}`
+    const imageUrl = await this.partnersService.uploadImage(filePath,file.buffer)
+
+    if(!imageUrl){
+      throw new BadRequestException('Image upload failed')
+    }
+    createPartnerDto.images = [imageUrl]
     return this.partnersService.create(createPartnerDto);
   }
   @Post('upload-image')

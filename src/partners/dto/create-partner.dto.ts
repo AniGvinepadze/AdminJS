@@ -1,7 +1,7 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreatePartnerDto {
-  @IsNotEmpty()
-  @IsString()
-  img: string;
+  @IsArray()
+  @IsOptional()
+  images?: string[];
 }
