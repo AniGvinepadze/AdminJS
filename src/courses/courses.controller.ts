@@ -43,25 +43,7 @@ export class CoursesController {
     createCourseDto.images = [imageUrl];
     return this.coursesService.create(createCourseDto);
   }
-  // @Post('upload-image')
-  // @UseInterceptors(FileInterceptor('file'))
-  // uploadImage(@UploadedFile() file: Express.Multer.File) {
-  //   const path = Math.random().toString().slice(2);
 
-  //   const type = file.mimetype.split('/')[1];
-  //   const filePath = `images/${path}`;
-  //   console.log(filePath, 'filepath');
-  //   return this.coursesService.uploadImage(filePath, file.buffer);
-  // }
-  // @Post('getImage')
-  // getFileById(@Body('fileId') fileId) {
-  //   return this.coursesService.getImage(fileId);
-  // }
-  // @Post('deleteImage')
-  // deleteImageById(@Body('fileId') fileId: string) {
-  //   console.log('deleteImageById called with:', fileId);
-  //   return this.coursesService.deleteImageById(fileId);
-  // }
   @Get()
   findAll() {
     return this.coursesService.findAll();
@@ -74,8 +56,13 @@ export class CoursesController {
 
   @Patch(':id')
   @UseGuards(isAuthGuard)
-  update(@Param('id') id: string, @Body() updateCourseDto: UpdateCourseDto) {
-    return this.coursesService.update(id, updateCourseDto);
+  @UseInterceptors(FileInterceptor('img'))
+  update(
+    @Param('id') id: string,
+    @Body() updateCourseDto: UpdateCourseDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.coursesService.update(id, updateCourseDto,file);
   }
 
   @Delete(':id')
