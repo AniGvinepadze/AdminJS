@@ -25,16 +25,22 @@ export class PartnersController {
   constructor(private readonly partnersService: PartnersService) {}
 
   @Post()
-  @UseInterceptors(FileInterceptor("img"))
- async create(@Body() createPartnerDto: CreatePartnerDto,@UploadedFile() file:Express.Multer.File) {
-    const mimetype = file.mimetype.split('/')[1]
-    const filePath = `images/${v4()}.${mimetype}`
-    const imageUrl = await this.partnersService.uploadImage(filePath,file.buffer)
+  @UseInterceptors(FileInterceptor('img'))
+  async create(
+    @Body() createPartnerDto: CreatePartnerDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    const mimetype = file.mimetype.split('/')[1];
+    const filePath = `images/${v4()}.${mimetype}`;
+    const imageUrl = await this.partnersService.uploadImage(
+      filePath,
+      file.buffer,
+    );
 
-    if(!imageUrl){
-      throw new BadRequestException('Image upload failed')
+    if (!imageUrl) {
+      throw new BadRequestException('Image upload failed');
     }
-    createPartnerDto.images = [imageUrl]
+    createPartnerDto.images = [imageUrl];
     return this.partnersService.create(createPartnerDto);
   }
   @Post('upload-image')
@@ -68,8 +74,13 @@ export class PartnersController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePartnerDto: UpdatePartnerDto) {
-    return this.partnersService.update(id, updatePartnerDto);
+  @UseInterceptors(FileInterceptor('img'))
+  update(
+    @Param('id') id: string,
+    @Body() updatePartnerDto: UpdatePartnerDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
+    return this.partnersService.update(id, updatePartnerDto, file);
   }
 
   @Delete(':id')
