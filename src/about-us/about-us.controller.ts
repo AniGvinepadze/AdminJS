@@ -29,7 +29,7 @@ export class AboutUsController {
     @Body() createAboutUsDto: CreateAboutUsDto,
     @UploadedFile() file?: Express.Multer.File,
   ) {
-    console.log("shemovida")
+    console.log('shemovida');
     const mimetype = file?.mimetype.split('/')[1];
     console.log(mimetype, 'mimetype');
     const filePath = `images/${v4()}.${mimetype}`;
@@ -58,8 +58,9 @@ export class AboutUsController {
 
   @Patch(':id')
   @UseGuards(isAuthGuard)
-  update(@Param('id') id: string, @Body() updateAboutUsDto: UpdateAboutUsDto) {
-    return this.aboutUsService.update(id, updateAboutUsDto);
+  @UseInterceptors(FileInterceptor('img'))
+  update(@Param('id') id: string, @Body() updateAboutUsDto: UpdateAboutUsDto,@UploadedFile() file:Express.Multer.File) {
+    return this.aboutUsService.update(id, updateAboutUsDto,file);
   }
 
   @Delete(':id')

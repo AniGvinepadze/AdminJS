@@ -11,6 +11,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { isValidObjectId, Model } from 'mongoose';
 import { AboutUs } from './schema/about-us.schema';
 import { AwsS3Service } from 'src/aws-s3/aws-s3.service';
+import { v4 } from 'uuid';
 
 @Injectable()
 export class AboutUsService {
@@ -29,13 +30,12 @@ export class AboutUsService {
     return this.s3Service.uploadFile(filePath, file);
   }
 
-  getImage(fileId){
-    return this.s3Service.getImageById(fileId)
+  getImage(fileId) {
+    return this.s3Service.getImageById(fileId);
   }
-  deleteImageById(fileId){
-    return this.s3Service.deleteImageById(fileId)
+  deleteImageById(fileId) {
+    return this.s3Service.deleteImageById(fileId);
   }
-  
 
   findAll() {
     return this.aboutUsModel.find();
@@ -49,9 +49,33 @@ export class AboutUsService {
     return content;
   }
 
-  async update(id: string, updateAboutUsDto: UpdateAboutUsDto) {
+  async update(
+    id: string,
+    updateAboutUsDto: UpdateAboutUsDto,
+    file?: Express.Multer.File,
+  ) {
     if (!isValidObjectId(id))
       throw new BadRequestException('Invalid id format is provided');
+
+    const existingAboutUs = await this.aboutUsModel.findById(id);
+    if (!existingAboutUs) throw new NotFoundException('Course not found');
+
+    if (file) {
+      const oldImagePath = existingAboutUs.images?.[0];
+      if (oldImagePath) {
+        await this.s3Service.deleteImageById(oldImagePath);
+      }
+
+      const mimetype = file.mimetype.split('/')[1];
+      const filePath = `images/${v4()}.${mimetype}`;
+      const imageUrl = await this.s3Service.uploadFile(filePath, file);
+
+      if (!imageUrl) {
+        throw new BadRequestException('Image upload failed');
+      }
+      updateAboutUsDto.images = [imageUrl];
+    }
+
     const updatedContent = await this.aboutUsModel.findByIdAndUpdate(
       id,
       updateAboutUsDto,
