@@ -4,10 +4,7 @@ import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.enableCors({
-    origin: ['https://adminpanel-reeducate-jkl1.vercel.app/','http://localhost:3001/'],
-    credentials:true
-  });
+  app.enableCors();
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
