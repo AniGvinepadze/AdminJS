@@ -8,9 +8,8 @@ export class Course {
 
   @Prop({ type: [String], default: [] })
   images: string[];
-
-  @Prop({ type: String })
-  link: string;
+  
+  
 
   @Prop({ type: String })
   category: string;

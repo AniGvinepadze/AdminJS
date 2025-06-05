@@ -9,9 +9,6 @@ export class CreateCourseDto {
   @IsOptional()
   images?: string[];
   
-  @IsNotEmpty()
-  @IsString()
-  link: string;
 
   @IsNotEmpty()
   @IsString()
