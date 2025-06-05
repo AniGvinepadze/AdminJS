@@ -10,6 +10,10 @@ export class Blog {
 
   @Prop({type:String})
   images:string[]
+
+    @Prop({ type: String })
+  blogDescription: string;
+
 }
 
 export const blogSchema = SchemaFactory.createForClass(Blog)

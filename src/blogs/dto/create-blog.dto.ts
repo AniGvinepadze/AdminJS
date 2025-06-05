@@ -12,4 +12,8 @@ export class CreateBlogDto {
   @IsArray()
   @IsOptional()
   images?: string[];
+
+    @IsNotEmpty()
+  @IsString()
+  blogDescription: string;
 }
