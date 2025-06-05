@@ -6,8 +6,11 @@ export class Feedback {
   @Prop({ type: String })
   description: string;
 
-  @Prop({ type: [mongoose.Schema.Types.ObjectId], ref: 'user', default: [] })
-  user: mongoose.Schema.Types.ObjectId[];
+  @Prop({ type: String })
+  author: string;
+
+  @Prop({ type: String })
+  category: string;
 }
 
 export const feedbackSchema = SchemaFactory.createForClass(Feedback);
