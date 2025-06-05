@@ -28,14 +28,13 @@ export class Course {
   courseGoal: string;
 
   @Prop({ type: String })
-  CourseDestription: string;
+  courseDestription: string;
 
   @Prop({ type: String })
   courseLittleGoals: string;
 
   @Prop({ type: String })
   courseSyllabus: string;
-
 }
 
 export const courseSchema = SchemaFactory.createForClass(Course);

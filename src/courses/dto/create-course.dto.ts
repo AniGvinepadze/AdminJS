@@ -31,7 +31,7 @@ export class CreateCourseDto {
   @IsOptional()
   courseQuantity: string;
 
-  @IsNumber()
+  @IsString()
   @IsOptional()
   coursePrice: string;
 
@@ -41,7 +41,7 @@ export class CreateCourseDto {
 
   @IsString()
   @IsOptional()
-  CourseDestription: string;
+  courseDestription: string;
 
   @IsString()
   @IsOptional()

@@ -5,12 +5,11 @@ export class CreateFeedbackDto {
   @IsString()
   description: string;
 
-    @IsOptional()
+  @IsOptional()
   @IsString()
   author: string;
 
-    @IsOptional()
+  @IsOptional()
   @IsString()
   category: string;
-
 }
