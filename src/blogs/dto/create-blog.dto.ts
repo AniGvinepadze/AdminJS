@@ -1,11 +1,11 @@
 import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateBlogDto {
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   title: string;
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
   description: string;
 
@@ -13,7 +13,7 @@ export class CreateBlogDto {
   @IsOptional()
   images?: string[];
 
-    @IsNotEmpty()
+  @IsOptional()
   @IsString()
   blogDescription: string;
 }
