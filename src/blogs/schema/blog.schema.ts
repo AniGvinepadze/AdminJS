@@ -8,7 +8,7 @@ export class Blog {
   @Prop({ type: String })
   description: string;
 
-  @Prop({type:String})
+  @Prop({type:[String],default:[]})
   images:string[]
 
     @Prop({ type: String })
