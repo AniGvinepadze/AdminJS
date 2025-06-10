@@ -10,7 +10,7 @@ export class Partner {
   description:string
 
   @Prop({type:String})
-  partnerDescription
+  partnerDescription:string
   
 }
 
